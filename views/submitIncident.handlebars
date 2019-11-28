@@ -1,1 +1,24 @@
 <!-- Write HTML for the home page here -->
+<form>
+	<fieldset>
+	<legend>Please provide incident details</legend>
+		<input type="date" id = "date" name="date"  placeholder="yyyy-mm-dd"></br>
+		<input type="text" id = "title" name="title" placeholder="Enter incident title"></br>
+		<input type="text" id = "description" name="description" placeholder="Enter incident description"></br>
+		<input type="text" id = "location" name="location" placeholder="Enter incident location"></br>
+		<input type="text" id = "type" name="type" placeholder="Enter incident type"></br>
+		<input type="text" id = "involvement" name="involvement" placeholder="Enter your involvement"></br>
+		<input type="text" id = "mode" name="mode" placeholder="Enter the incident mode"></br>
+		
+		<input type="hidden" id="updates" name="updates" value="1">
+		<input type="checkbox" id="updatesDisp" onclick="this.previousSibling.value=1-this.previousSibling.value" checked><label for="updatesDisp">Send me updates about this incident</label></br>
+	
+		
+		<input type="hidden" id="isAnonymousValue" name="isAnonymous" value="0">
+		<input type="checkbox" id="isAnonymousDisp" onclick="this.previousSibling.value=1-this.previousSibling.value"><label for="isAnonymousDisp">I would like this report to be anonymous</label></br>
+	
+		<button onclick="subIncident()">Save Incident</button>
+	</fieldset>
+</form>
+
+<script src="/js/subIncidentScript.js"></script>
