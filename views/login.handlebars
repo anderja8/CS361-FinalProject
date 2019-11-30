@@ -1,1 +1,28 @@
-<!-- Write HTML for the home page here -->
+<!-- Write HTML for the login page here -->
+<div class="bg-info container">
+  <div class="bg-primary row">
+    <div class="text-center col-xs-12">
+      <h1 class="display-1">LA Street Safety Portal - Login</h1>
+    </div>
+  </div>
+  <form id="check-login">
+    <div class="form-group">
+      <label for="username">Username:</label>
+      <input id="user" type="text" class="form-control" id="username" placeholder="Enter username" required="required">
+      <label for="password">Password:</label>
+      <input id="pass" type="password" class="form-control" id="description" placeholder="Enter password" required="required">
+      <div class="submitButton">
+        <button type="submit" class="btn btn-primary">Login</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<script defer>
+document.getElementById("check-login").onsubmit = function(e) {
+    e.preventDefault();
+    var name = document.getElementById("user").value;
+    var pw = document.getElementById("pass").value;
+    window.location.href = '/login/' + name + '/' + pw;
+};
+</script>

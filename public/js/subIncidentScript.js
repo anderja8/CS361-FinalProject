@@ -38,3 +38,14 @@ function subIncident() {
 		window.location.href = urlPath;
 	});
 }
+
+function subIncidentAJAX() {
+    $.ajax({
+        url: '/save-incident',
+        type: 'POST',
+        data: $('#post-incident').serialize(),
+        complete: function result() {
+            window.location.replace("/");
+        }
+    })
+}
