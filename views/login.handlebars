@@ -16,6 +16,9 @@
       </div>
     </div>
   </form>
+  <div class="createAct">
+        <button type="submit" id="createActbtn">Create Account</button>
+  </div>
 </div>
 
 <script defer>
@@ -24,5 +27,9 @@ document.getElementById("check-login").onsubmit = function(e) {
     var name = document.getElementById("user").value;
     var pw = document.getElementById("pass").value;
     window.location.href = '/login/' + name + '/' + pw;
+};
+document.getElementById("createActbtn").onclick = function(e) {
+    e.preventDefault();
+    window.location.href = '/createAccount/';
 };
 </script>
