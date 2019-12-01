@@ -145,7 +145,7 @@ app.get('/landing', function(req, res, next) {
     if(!req.session.userid) {
         context.message = "Your login was unsuccessful. Please check your username and password.";
         context.userid = null;
-        res.render('/', context)
+        res.render('landing', context)
     }
     else {
         context.message = "You are now logged in. Current User: " + req.session.name;
