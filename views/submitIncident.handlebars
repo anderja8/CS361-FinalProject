@@ -1,67 +1,84 @@
 <!-- Write HTML for the submit incident page here -->
-<form id="post-incident">
-	<fieldset>
-	<legend>Please provide incident details</legend>
-		<input type="hidden" id = "userid" name="userid" value="{{userid}}">
-		Incident Date: <input type="date" id = "date" name="date"  placeholder="yyyy-mm-dd"></br>
-		Incident Title: <input type="text" id = "title" name="title" placeholder="Enter incident title"></br>
-		Incident Description: <input type="text" id = "description" name="description" placeholder="Enter incident description"></br>
-		Incident Location: <input type="text" id = "location" name="location" placeholder="Enter incident location"></br>
-		Incident Type: <select id = "type" name="type" placeholder="Enter incident type">
-			<option value="accident">Accident</option>
-			<option value="near_miss">Near Miss</option>
-			<option value="other">Other</option>
-		</select></br>
-		Your Involvement: <select id = "involvement" name="involvement" placeholder="Select your involvement">
-			<option value="bystander">Bystander</option>
-			<option value="driver">Involved - Driver</option>
-			<option value="passenger">Involved - Passenger</option>
-			<option value="pedestrian">Involved - Pedestrian</option>
-			<option value="other">Other</option>
-		</select></br>
-		Mode of Transportation for 1st Party: <select id = "mode1" name="mode1" placeholder="Enter transportation mode of the 1st party">
-			<option value="automobile">Automobile</option>
-			<option value="bicycle">Bicycle</option>
-			<option value="motorcycle">Motorcycle</option>
-			<option value="pedestrian">Pedestrian</option>
-			<option value="skateboard">Skateboard</option>
-			<option value="other">Other</option>
-		</select></br>
-		Mode of Transportation for 2nd Party: <select id = "mode2" name="mode2" placeholder="Enter transportation mode of the 2nd party">
-			<option value="automobile">Automobile</option>
-			<option value="bicycle">Bicycle</option>
-			<option value="motorcycle">Motorcycle</option>
-			<option value="pedestrian">Pedestrian</option>
-			<option value="skateboard">Skateboard</option>
-			<option value="">N/A</option>
-			<option value="other">Other</option>
-		</select></br>
-		Mode of Transportation for 3rd Party: <select id = "mode3" name="mode3" placeholder="Enter transportation mode of the 3rd party">
-			<option value="automobile">Automobile</option>
-			<option value="bicycle">Bicycle</option>
-			<option value="motorcycle">Motorcycle</option>
-			<option value="pedestrian">Pedestrian</option>
-			<option value="skateboard">Skateboard</option>
-			<option value="">N/A</option>
-			<option value="other">Other</option>
-		</select></br>
-		Mode of Transportation for 4th Party: <select id = "mode4" name="mode4" placeholder="Enter transportation mode of the 4th party">
-			<option value="automobile">Automobile</option>
-			<option value="bicycle">Bicycle</option>
-			<option value="motorcycle">Motorcycle</option>
-			<option value="pedestrian">Pedestrian</option>
-			<option value="skateboard">Skateboard</option>
-			<option value="">N/A</option>
-			<option value="other">Other</option>
-		</select></br>
-		<text>Would you like to submit anonymously?</text></br>
-		<input type="radio" name="isAnonymous" value="1">Yes
-                <input type="radio" name="isAnonymous" value="0" checked="checked">No<br/>
-		<text>Would you like to receive updates?</text></br>
-		<input type="radio" name="receivesUpdates" value="1" checked="checked">Yes
-                <input type="radio" name="receivesUpdates" Anonymous" value="0">No<br />
-		<input type="submit" value="Save Incident">
-	</fieldset>
-</form>
+<div class="container">
+	<div class="row"> 
+		<div class="col-sm-2"></div>
+		<div class="col-sm-8">
+			<form id="post-incident">
+				<div class="form-group">
+					<fieldset>
+						<legend>Please provide incident details</legend>
+							<input type="hidden" id = "userid" name="userid" value="{{userid}}">
+							Incident Date: <input type="date" class="form-control" id = "date" name="date"  placeholder="yyyy-mm-dd"></br>
+							Incident Title: <input type="text" class="form-control" id = "title" name="title" placeholder="Enter incident title"></br>
+							Incident Description: <input type="text" class="form-control"  id = "description" name="description" placeholder="Enter incident description"></br>
+							Incident Location: <input type="text" class="form-control" id = "location" name="location" placeholder="Enter incident location"></br>
+							Incident Type: <select id = "type" class="form-control"  name="type" placeholder="Enter incident type">
+								<option value="accident">Accident</option>
+								<option value="near_miss">Near Miss</option>
+								<option value="other">Other</option>
+							</select></br>
+							Your Involvement: <select id = "involvement" class="form-control" name="involvement" placeholder="Select your involvement">
+								<option value="bystander">Bystander</option>
+								<option value="driver">Involved - Driver</option>
+								<option value="passenger">Involved - Passenger</option>
+								<option value="pedestrian">Involved - Pedestrian</option>
+								<option value="other">Other</option>
+							</select></br>
+							Mode of Transportation for 1st Party: <select id = "mode1" class="form-control"  name="mode1" placeholder="Enter transportation mode of the 1st party">
+								<option value="automobile">Automobile</option>
+								<option value="bicycle">Bicycle</option>
+								<option value="motorcycle">Motorcycle</option>
+								<option value="pedestrian">Pedestrian</option>
+								<option value="skateboard">Skateboard</option>
+								<option value="other">Other</option>
+							</select></br>
+							Mode of Transportation for 2nd Party: <select id = "mode2" class="form-control" name="mode2" placeholder="Enter transportation mode of the 2nd party">
+								<option value="automobile">Automobile</option>
+								<option value="bicycle">Bicycle</option>
+								<option value="motorcycle">Motorcycle</option>
+								<option value="pedestrian">Pedestrian</option>
+								<option value="skateboard">Skateboard</option>
+								<option value="">N/A</option>
+								<option value="other">Other</option>
+							</select></br>
+							Mode of Transportation for 3rd Party: <select id = "mode3" class="form-control" name="mode3" placeholder="Enter transportation mode of the 3rd party">
+								<option value="automobile">Automobile</option>
+								<option value="bicycle">Bicycle</option>
+								<option value="motorcycle">Motorcycle</option>
+								<option value="pedestrian">Pedestrian</option>
+								<option value="skateboard">Skateboard</option>
+								<option value="">N/A</option>
+								<option value="other">Other</option>
+							</select></br>
+							Mode of Transportation for 4th Party: <select id = "mode4" class="form-control" name="mode4" placeholder="Enter transportation mode of the 4th party">
+								<option value="automobile">Automobile</option>
+								<option value="bicycle">Bicycle</option>
+								<option value="motorcycle">Motorcycle</option>
+								<option value="pedestrian">Pedestrian</option>
+								<option value="skateboard">Skateboard</option>
+								<option value="">N/A</option>
+								<option value="other">Other</option>
+							</select></br>
+							<text>Would you like to submit anonymously?</text></br>
+							<div class="form-check form-check-inline">	
+								<input type="radio"  class="form-check-input" name="isAnonymous" value="1">Yes
+								<input class="form-check-input" type="radio" name="isAnonymous" value="0" checked="checked">No<br />
+							</div>
+
+							<text>Would you like to receive updates?</text></br>
+							<div class="form-check form-check-inline">
+								<input type="radio" class="form-check-input" name="receivesUpdates" value="1" checked="checked">Yes
+								<input type="radio" class="form-check-input" name="receivesUpdates" Anonymous" value="0">No<br />
+							</div>
+							<input type="submit" value="Save Incident">
+						</fieldset>
+				</div>
+				
+			</form>
+		</div>
+		<div class="col-sm-2"></div>
+	</div>
+</div>
+
 
 <script defer>document.getElementById("post-incident").onsubmit = function(e) { e.preventDefault(); subIncidentAJAX(); };</script>
