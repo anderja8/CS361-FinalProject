@@ -84,10 +84,12 @@ app.post('/save-incident', function(req, res, next) {
     console.log(req.body);
 	
     //Submit the query
-    //For now, I'm defaulting the userid to 1 for everybody
+    context = {};
+    context = req.body;
+    nullify(context);
     mysql.pool.query(qryString,
-            [req.body.userid, req.body.date, req.body.title, req.body.description, req.body.location, req.body.type, req.body.involvement,
-             req.body.mode1, req.body.mode2, req.body.mode3, req.body.mode4, req.body.isAnonymous, req.body.receivesUpdates], function(err, result){
+            [context.userid, context.date, context.title, context.description, context.location, context.type, context.involvement,
+             context.mode1, context.mode2, context.mode3, context.mode4, context.isAnonymous, context.receivesUpdates], function(err, result){
         if (err) {
             console.log('Error inserting incident to db');
             console.log(err);
@@ -137,3 +139,12 @@ app.use(function(err, req, res, next) {
 app.listen(app.get('port'), function() {
     console.log('Web server has begun running on port ' + app.get('port') + '; press Ctrl+C to terminate.');
 });
+
+//Helper function to convert empty strings to NULL
+function nullify(array) {
+    for (key in array) {
+        if (array[key] == "") {
+            array[key] = null;
+        }
+    }
+};
