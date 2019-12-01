@@ -34,7 +34,7 @@ app.use(passport.session());
 app.get('/', function(req, res, next) {
     var context = {};
     if(!req.session.userid) {
-        // context.userMessage = "Current User: Logged Out";
+        context.userMessage = "Note: You are logged out. Please log in to submit an incident.";
         context.userid = null;
     }
     else {
@@ -148,7 +148,7 @@ app.get('/landing', function(req, res, next) {
         res.render('/', context)
     }
     else {
-        context.message = "Current User: " + req.session.name;
+        context.message = "You are now logged in. Current User: " + req.session.name;
         context.userid = req.session.userid;
         res.render('landing', context);
     }  

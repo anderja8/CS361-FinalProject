@@ -45,7 +45,7 @@ function subIncidentAJAX() {
         type: 'POST',
         data: $('#post-incident').serialize(),
         complete: function result() {
-            window.location.replace("/landing");
+            window.location.replace("/");
         }
     })
 }

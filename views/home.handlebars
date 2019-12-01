@@ -6,8 +6,11 @@
     </div>
   </div>
   <h2 class="display-2">{{userMessage}}</h2>
-  <button onclick="location.href='/login';" class="btn btn-primary">Login</button>
+  {{#if userid}}
+    <button onclick="location.href='/logout'" class="btn btn-primary">Logout</button>
+  {{else}}
+    <button onclick="location.href='/login';" class="btn btn-primary">Login</button>
+  {{/if}}
   <button onclick="navToIncidentCreation()" class="btn btn-primary">Submit New Incident</button>
-  {{!-- <button onclick="location.href='/logout'" class="btn btn-primary">Logout</button> --}}
 </div>
 
