@@ -11,6 +11,7 @@ let app = express();
 let handlebars = require('express-handlebars').create({defaultLayout:'home'});
 let session = require('express-session');
 let bodyParser = require('body-parser');
+let passport = require('passport');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
