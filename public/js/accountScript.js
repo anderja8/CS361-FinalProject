@@ -42,7 +42,8 @@ function createActAJAX() {
         type: 'POST',
         data: $('#post-account').serialize(),
         complete: function result() {
-            window.location.replace("/");
+            window.location.replace("/landing");
         }
     })
 }
+

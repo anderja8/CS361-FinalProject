@@ -34,7 +34,7 @@ app.use(passport.session());
 app.get('/', function(req, res, next) {
     var context = {};
     if(!req.session.userid) {
-        context.userMessage = "Current User: Logged Out";
+        // context.userMessage = "Current User: Logged Out";
         context.userid = null;
     }
     else {
@@ -133,10 +133,11 @@ app.post('/save-account', function(req, res, next)
                 res.write(JSON.stringify(error));
                 res.end();
             }else{
-                res.redirect('/login');
+                console.log('/login/'+req.body.username+'/'+req.body.password);
+                res.redirect('login/'+req.body.username+'/'+req.body.password);
             }
         });
-    });
+});
 
 app.get('/landing', function(req, res, next) {
     var context = {};
@@ -144,12 +145,13 @@ app.get('/landing', function(req, res, next) {
     if(!req.session.userid) {
         context.message = "Your login was unsuccessful. Please check your username and password.";
         context.userid = null;
+        res.render('/', context)
     }
     else {
-        context.message = "Your login successful.";
+        context.message = "Current User: " + req.session.name;
         context.userid = req.session.userid;
+        res.render('landing', context);
     }  
-    res.render('landing', context);
 });
 
 // Logout form
