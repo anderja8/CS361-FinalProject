@@ -22,9 +22,11 @@ app.set('port', 52222);
 
 app.use(session({
     secret: 'cookieSecret',
-    resave: true,
-    saveUninitialized: true
+    resave: false,
+    saveUninitialized: false
 }));
+app.use(passport.initialize());
+app.use(passport.session());
 
 //Renders home page
 app.get('/', function(req, res, next) {
@@ -39,6 +41,8 @@ app.get('/createAccount', function(req, res, next) {
     res.render('account', context);
 });
 
+
+
 //Renders login page
 app.get('/login', function(req, res, next) {
     var context = {};
@@ -46,18 +50,20 @@ app.get('/login', function(req, res, next) {
     res.render('login', context);
 });
 
+
 //Renders incident report submission page
 app.get('/incidentReport/submit', function(req, res, next) {
     var context = {};
     if(!req.session.userid) {
         console.log("No user has been logged in");
         context.userid = null;
+        res.redirect('/login');
     }
     else {
         context.userid = req.session.userid;
-    }
-    context.layout = 'submitIncident';
-    res.render('submitIncident', context);
+        context.layout = 'submitIncident';
+        res.render('submitIncident', context);
+    }  
 });
 
 //Checks login credentials
@@ -68,9 +74,10 @@ app.get('/login/:username/:password', function(req, res, next) {
     function complete() {
         callbackCount++;
         if (callbackCount >= 1) {
-            res.redirect('/');
+            res.redirect('/landing');
         }
     }
+                
 });
 
 //Posts an incident to the database
@@ -100,6 +107,47 @@ app.post('/save-incident', function(req, res, next) {
             res.end();
         }
     });
+});
+
+// account creation submition DOES NOT WORK
+<!--
+app.post('/save-account', function(req, res, next) 
+{
+    console.log(req.body.firstName);
+    console.log(req.body.lastName);
+    console.log(req.body.email);
+    console.log(req.body.username);
+    console.log(req.body.password);
+
+    console.log(req.body.users)
+        console.log(req.body)
+        var mysql = req.app.get('mysql');
+        var sql = "INSERT INTO users (firstName, lastName, email, username, password) VALUES (?,?,?,?,?)";
+        var inserts = [req.body.firstName, req.body.lastName, req.body.email, req.body.username, req.body.password];
+        sql = mysql.pool.query(sql,inserts,function(error, results, fields){
+            if(error){
+                console.log(JSON.stringify(error))
+                res.write(JSON.stringify(error));
+                res.end();
+            }else{
+                res.redirect('/login');
+            }
+        });
+    });
+
+app.get('/landing', function(req, res, next) {
+    var context = {};
+    context.layout = 'landing';
+    res.render('landing', context);
+});
+-->
+
+// logout form
+app.get('/logout', function(req, res) {
+    req.logout();
+    var context = {};
+    context.layout = 'logout';
+    res.render('logout', context);
 });
 
 //Gets the user id if the username and password are correct
@@ -148,3 +196,13 @@ function nullify(array) {
         }
     }
 };
+
+passport.serializeUser(function(user_id, done) {
+    done(null, user_id);
+});
+
+passport.deserializeUser(function(user_id, done) {
+    //User.findById(id, function (err, user) {
+        done(err, user);
+    });
+//});
