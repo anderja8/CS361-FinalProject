@@ -1,24 +1,35 @@
 <!-- Write HTML for the home page here -->
 <div class="container">
     <div class="row">
-        <form id="post-account">
-            <div class="form-group">
-            <label>First Name:</label>
-            <input id="firstName" type="text" class="form-control" placeholder="First Name" required="required">
-            <label>Last Name:</label>
-            <input id="lastName" type="text" class="form-control" placeholder="Last Name" required="required">
-            <label>Email:</label>
-            <input id="email" type="text" class="form-control" placeholder="Email" required="required">
-            <label>Username:</label>
-            <input id="username" type="text" class="form-control" placeholder="Username" required="required">
-            <label>Password:</label>
-            <input id="password" type="password" class="form-control" placeholder="Password" required="required">
-            <div class="submitButton">
-                <button type="submit" class="btn btn-primary">Create Account</button>
-            </div>
-            </div>
-        </form>
+        <div class="col-sm-2"> </div>
+        <div class="col-sm-8">
+            <form id="post-account">
+                <div class="form-group">
+                    <label>First Name:</label>
+                    <input id="firstName" type="text" class="form-control" placeholder="First Name" required="required">
+                    <label>Last Name:</label>
+                    <input id="lastName" type="text" class="form-control" placeholder="Last Name" required="required">
+                    <label>Email:</label>
+                    <input id="email" type="text" class="form-control" placeholder="Email" required="required">
+                    <label>Username:</label>
+                    <input id="username" type="text" class="form-control" placeholder="Username" required="required">
+                    <label>Password:</label>
+                    <input id="password" type="password" class="form-control" placeholder="Password" required="required">
+                    <div class="submitButton">
+                        <button type="submit" class="btn btn-primary">Create Account</button>
+                    </div>
+                </div>
+            </form>     
+        </div>
+  
+        <div class="col-sm-2"> </div>
     </div>
+
 </div>
 
-<script defer>document.getElementById("post-account").onsubmit = function(e) { e.preventDefault(); createActAJAX(); };</script>
+<script>
+    document.getElementById("post-account").onsubmit = function(e) {
+        e.preventDefault(); 
+        createActAJAX(); 
+    };
+</script>
