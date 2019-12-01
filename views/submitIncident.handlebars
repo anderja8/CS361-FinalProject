@@ -1,23 +1,39 @@
 <!-- Write HTML for the submit incident page here -->
-<form id="post-incident">
-	<fieldset>
-	<legend>Please provide incident details</legend>
-		<input type="hidden" id = "userid" name="userid" value="{{userid}}">
-		<input type="date" id = "date" name="date"  placeholder="yyyy-mm-dd"></br>
-		<input type="text" id = "title" name="title" placeholder="Enter incident title"></br>
-		<input type="text" id = "description" name="description" placeholder="Enter incident description"></br>
-		<input type="text" id = "location" name="location" placeholder="Enter incident location"></br>
-		<input type="text" id = "type" name="type" placeholder="Enter incident type"></br>
-		<input type="text" id = "involvement" name="involvement" placeholder="Enter your involvement"></br>
-		<input type="text" id = "mode" name="mode" placeholder="Enter the incident mode"></br>
-		<text>Would you like to submit anonymously?</text></br>
-		<input type="radio" name="isAnonymous" value="1">Yes
-                <input type="radio" name="isAnonymous" value="0" checked="checked">No<br />
-		<text>Would you like to receive updates?</text></br>
-		<input type="radio" name="receivesUpdates" value="1" checked="checked">Yes
-                <input type="radio" name="receivesUpdates" Anonymous" value="0">No<br />
-		<input type="submit" value="Save Incident">
-	</fieldset>
-</form>
+<div class="container">
+	<div class="row">
+		<div class="col-sm-2"></div>
+		<div class="col-sm-8">
+			<form id="post-incident">
+				<div class="form-group">
+				<legend>Please provide incident details</legend>
+					<input type="hidden" class="form-control" id = "userid" name="userid" value="{{userid}}">
+					<input type="date" class="form-control" id = "date" name="date"  placeholder="yyyy-mm-dd"></br>
+					<input type="text" class="form-control" id = "title" name="title" placeholder="Enter incident title"></br>
+					<input type="text" class="form-control" id = "description" name="description" placeholder="Enter incident description"></br>
+					<input type="text" class="form-control" id = "location" name="location" placeholder="Enter incident location"></br>
+					<input type="text" class="form-control" id = "type" name="type" placeholder="Enter incident type"></br>
+					<input type="text" class="form-control" id = "involvement" name="involvement" placeholder="Enter your involvement"></br>
+					<input type="text" class="form-control" id = "mode" name="mode" placeholder="Enter the incident mode"></br>
+					<text>Would you like to submit anonymously?</text></br>
+					<div class="form-check form-check-inline">	
+						<input type="radio" class="form-check-input"  name="isAnonymous" value="1">Yes
+						<input class="form-check-input" type="radio" name="isAnonymous" value="0" checked="checked">No<br />
+					</div>
+
+					<text>Would you like to receive updates?</text></br>
+					<div class="form-check form-check-inline">
+						<input type="radio" class="form-check-input" name="receivesUpdates" value="1" checked="checked">Yes
+						<input type="radio" class="form-check-input" name="receivesUpdates" value="0">No<br />
+					</div>
+					
+					
+					<input type="submit" class="btn btn-primary" value="Save Incident">
+				</div>
+			</form>
+		</div>
+
+		<div class="col-sm-2"></div>
+	</div>
+</div>
 
 <script defer>document.getElementById("post-incident").onsubmit = function(e) { e.preventDefault(); subIncidentAJAX(); };</script>
