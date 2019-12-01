@@ -26,12 +26,21 @@ app.use(session({
     resave: false,
     saveUninitialized: false
 }));
+
 app.use(passport.initialize());
 app.use(passport.session());
 
 //Renders home page
 app.get('/', function(req, res, next) {
     var context = {};
+    if(!req.session.userid) {
+        context.userMessage = "Current User: Logged Out";
+        context.userid = null;
+    }
+    else {
+        context.userMessage = "Current User: " + req.session.name;
+        context.userid = req.session.userid;
+    }  
     res.render('home', context);
 });
 
@@ -42,15 +51,12 @@ app.get('/createAccount', function(req, res, next) {
     res.render('account', context);
 });
 
-
-
 //Renders login page
 app.get('/login', function(req, res, next) {
     var context = {};
     context.layout = 'login';
     res.render('login', context);
 });
-
 
 //Renders incident report submission page
 app.get('/incidentReport/submit', function(req, res, next) {
@@ -110,8 +116,7 @@ app.post('/save-incident', function(req, res, next) {
     });
 });
 
-// account creation submition DOES NOT WORK
-<!--
+// account creation submission
 app.post('/save-account', function(req, res, next) 
 {
     console.log(req.body.firstName);
@@ -120,9 +125,6 @@ app.post('/save-account', function(req, res, next)
     console.log(req.body.username);
     console.log(req.body.password);
 
-    console.log(req.body.users)
-        console.log(req.body)
-        var mysql = req.app.get('mysql');
         var sql = "INSERT INTO users (firstName, lastName, email, username, password) VALUES (?,?,?,?,?)";
         var inserts = [req.body.firstName, req.body.lastName, req.body.email, req.body.username, req.body.password];
         sql = mysql.pool.query(sql,inserts,function(error, results, fields){
@@ -139,13 +141,21 @@ app.post('/save-account', function(req, res, next)
 app.get('/landing', function(req, res, next) {
     var context = {};
     context.layout = 'landing';
+    if(!req.session.userid) {
+        context.message = "Your login was unsuccessful. Please check your username and password.";
+        context.userid = null;
+    }
+    else {
+        context.message = "Your login successful.";
+        context.userid = req.session.userid;
+    }  
     res.render('landing', context);
 });
--->
 
-// logout form
+// Logout form
 app.get('/logout', function(req, res) {
     req.logout();
+    req.session.destroy();
     var context = {};
     context.layout = 'logout';
     res.render('logout', context);
@@ -153,7 +163,7 @@ app.get('/logout', function(req, res) {
 
 //Gets the user id if the username and password are correct
 function getUserID(res, req, context, username, password, complete) {
-    mysql.pool.query("SELECT id FROM users WHERE username = ? AND password = ?", [username, password], function(error, results, fields) {
+    mysql.pool.query("SELECT id, firstName, lastName FROM users WHERE username = ? AND password = ?", [username, password], function(error, results, fields) {
         if (error) {
             res.write(JSON.stringify(error));
             res.end();
@@ -161,7 +171,9 @@ function getUserID(res, req, context, username, password, complete) {
         }
         else if (results.length > 0) {
             req.session.userid = results[0].id;
+            req.session.name = results[0].firstName + " " + results[0].lastName;
             console.log(req.session.userid);
+            console.log(req.session.name);
         }
         complete();
     });

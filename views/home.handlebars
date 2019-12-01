@@ -1,4 +1,13 @@
 <!-- Write HTML for the home page here -->
-<button onclick="location.href='/login';" class="btn btn-primary">Login</button>
-<button onclick="navToIncidentCreation()" class="btn btn-primary">Submit New Incident</button>
-<button onclick="logout()" class="btn btn-primary">Logout</button>
+<div class="bg-info container">
+  <div class="bg-primary row">
+    <div class="text-center col-xs-12">
+      <h1 class="display-1">LA Street Safety Portal - Home</h1>
+    </div>
+  </div>
+  <h2 class="display-2">{{userMessage}}</h2>
+  <button onclick="location.href='/login';" class="btn btn-primary">Login</button>
+  <button onclick="navToIncidentCreation()" class="btn btn-primary">Submit New Incident</button>
+  <button onclick="location.href='/logout'" class="btn btn-primary">Logout</button>
+</div>
+

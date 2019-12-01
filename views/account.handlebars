@@ -1,20 +1,26 @@
-<!-- Write HTML for the home page here -->
-<div class="container">
+<!-- Write HTML for the create account page here -->
+<div class="bg-info container">
+  <div class="bg-primary row">
+    <div class="text-center col-xs-12">
+      <h1 class="display-1">LA Street Safety Portal - Create Account</h1>
+    </div>
+  </div>
+  <button onclick="location.href='/';" class="btn btn-primary" id="home-button">Return Home</button>
     <div class="row">
         <div class="col-sm-2"> </div>
         <div class="col-sm-8">
             <form id="post-account">
                 <div class="form-group">
                     <label>First Name:</label>
-                    <input id="firstName" type="text" class="form-control" placeholder="First Name" required="required">
+                    <input id="firstName" name="firstName" type="text" class="form-control" placeholder="First Name" required="required">
                     <label>Last Name:</label>
-                    <input id="lastName" type="text" class="form-control" placeholder="Last Name" required="required">
+                    <input id="lastName" name="lastName" type="text" class="form-control" placeholder="Last Name" required="required">
                     <label>Email:</label>
-                    <input id="email" type="text" class="form-control" placeholder="Email" required="required">
+                    <input id="email" name="email" type="text" class="form-control" placeholder="Email" required="required">
                     <label>Username:</label>
-                    <input id="username" type="text" class="form-control" placeholder="Username" required="required">
+                    <input id="username" name="username" type="text" class="form-control" placeholder="Username" required="required">
                     <label>Password:</label>
-                    <input id="password" type="password" class="form-control" placeholder="Password" required="required">
+                    <input id="password" name="password" type="password" class="form-control" placeholder="Password" required="required">
                     <div class="submitButton">
                         <button type="submit" class="btn btn-primary">Create Account</button>
                     </div>

@@ -1,18 +1,24 @@
 <!-- Write HTML for the submit incident page here -->
-<div class="container">
+<div class="bg-info container">
+  <div class="bg-primary row">
+    <div class="text-center col-xs-12">
+      <h1 class="display-1">LA Street Safety Portal - Submit Incident</h1>
+    </div>
+  </div>
+  <button onclick="location.href='/';" class="btn btn-primary" id="home-button">Return Home</button>
 	<div class="row"> 
 		<div class="col-sm-2"></div>
 		<div class="col-sm-8">
 			<form id="post-incident">
 				<div class="form-group">
 					<fieldset>
-						<legend>Please provide incident details</legend>
+						<h2 class="display-2">Please provide incident details</h2>
 							<input type="hidden" id = "userid" name="userid" value="{{userid}}">
-							Incident Date: <input type="date" class="form-control" id = "date" name="date"  placeholder="yyyy-mm-dd"></br>
-							Incident Title: <input type="text" class="form-control" id = "title" name="title" placeholder="Enter incident title"></br>
-							Incident Description: <input type="text" class="form-control"  id = "description" name="description" placeholder="Enter incident description"></br>
-							Incident Location: <input type="text" class="form-control" id = "location" name="location" placeholder="Enter incident location"></br>
-							Incident Type: <select id = "type" class="form-control"  name="type" placeholder="Enter incident type">
+							Incident Date: <input type="date" class="form-control" required="required" id = "date" name="date"  placeholder="yyyy-mm-dd"></br>
+							Incident Title: <input type="text" class="form-control" required="required" id = "title" name="title" placeholder="Enter incident title"></br>
+							Incident Description: <input type="text" class="form-control" required="required" id = "description" name="description" placeholder="Enter incident description"></br>
+							Incident Location: <input type="text" class="form-control" required="required" id = "location" name="location" placeholder="Enter incident location"></br>
+							Incident Type: <select id = "type" class="form-control" name="type" placeholder="Enter incident type">
 								<option value="accident">Accident</option>
 								<option value="near_miss">Near Miss</option>
 								<option value="other">Other</option>
@@ -33,30 +39,30 @@
 								<option value="other">Other</option>
 							</select></br>
 							Mode of Transportation for 2nd Party: <select id = "mode2" class="form-control" name="mode2" placeholder="Enter transportation mode of the 2nd party">
+								<option value="">N/A</option>
 								<option value="automobile">Automobile</option>
 								<option value="bicycle">Bicycle</option>
 								<option value="motorcycle">Motorcycle</option>
 								<option value="pedestrian">Pedestrian</option>
 								<option value="skateboard">Skateboard</option>
-								<option value="">N/A</option>
 								<option value="other">Other</option>
 							</select></br>
 							Mode of Transportation for 3rd Party: <select id = "mode3" class="form-control" name="mode3" placeholder="Enter transportation mode of the 3rd party">
+								<option value="">N/A</option>
 								<option value="automobile">Automobile</option>
 								<option value="bicycle">Bicycle</option>
 								<option value="motorcycle">Motorcycle</option>
 								<option value="pedestrian">Pedestrian</option>
 								<option value="skateboard">Skateboard</option>
-								<option value="">N/A</option>
 								<option value="other">Other</option>
 							</select></br>
 							Mode of Transportation for 4th Party: <select id = "mode4" class="form-control" name="mode4" placeholder="Enter transportation mode of the 4th party">
+								<option value="">N/A</option>
 								<option value="automobile">Automobile</option>
 								<option value="bicycle">Bicycle</option>
 								<option value="motorcycle">Motorcycle</option>
 								<option value="pedestrian">Pedestrian</option>
 								<option value="skateboard">Skateboard</option>
-								<option value="">N/A</option>
 								<option value="other">Other</option>
 							</select></br>
 							<text>Would you like to submit anonymously?</text></br>
@@ -70,7 +76,9 @@
 								<input type="radio" class="form-check-input" name="receivesUpdates" value="1" checked="checked">Yes
 								<input type="radio" class="form-check-input" name="receivesUpdates" Anonymous" value="0">No<br />
 							</div>
-							<input type="submit" value="Save Incident">
+							<div class="submitButton">
+								<button type="submit" class="btn btn-primary">Save Incident</button>
+							</div>
 						</fieldset>
 				</div>
 				
