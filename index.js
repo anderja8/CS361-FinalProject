@@ -77,8 +77,8 @@ app.get('/login/:username/:password', function(req, res, next) {
 app.post('/save-incident', function(req, res, next) {
     //Create the query string
     var qryString = "insert into incidentReports" + 
-        " (userid, incidentDate, title, description, location, incidentType, involvement, mode1, isAnonymous, receivesUpdates)" +
-        " values (?,?,?,?,?,?,?,?,?,?)";
+        " (userid, incidentDate, title, description, location, incidentType, involvement, mode1, mode2, mode3, mode4, isAnonymous, receivesUpdates)" +
+        " values (?,?,?,?,?,?,?,?,?,?,?,?,?)";
 	
     console.log(qryString);
     console.log(req.body);
@@ -87,7 +87,7 @@ app.post('/save-incident', function(req, res, next) {
     //For now, I'm defaulting the userid to 1 for everybody
     mysql.pool.query(qryString,
             [req.body.userid, req.body.date, req.body.title, req.body.description, req.body.location, req.body.type, req.body.involvement,
-             req.body.mode, req.body.isAnonymous, req.body.receivesUpdates], function(err, result){
+             req.body.mode1, req.body.mode2, req.body.mode3, req.body.mode4, req.body.isAnonymous, req.body.receivesUpdates], function(err, result){
         if (err) {
             console.log('Error inserting incident to db');
             console.log(err);
