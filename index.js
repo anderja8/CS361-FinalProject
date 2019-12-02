@@ -162,7 +162,35 @@ app.get('/logout', function(req, res) {
     context.layout = 'logout';
     res.render('logout', context);
 });
+app.get('/viewUserReports',function(req,res){
+    var context = {};
+    mysql.pool.query('SELECT * FROM incidentReports where userid =?',[req.session.userid],function(err,reports,fields){
+        if(err){
+            res.end();
+            return;
+        }
+        console.log("tried showing")
+        var params = [];
+        for(report in reports){
+            var newRow ={
+                'incidentDate': reports[report].incidentDate,
+                'title': reports[report].title,
+                'description': reports[report].description,
+                'location': reports[report].location,
+                'incidentType': reports[report].incidentType,
+                'id':reports[report].id
+            };
+            params.push(newRow);
+        }
+        context.reports = params;
+        console.log(context)
+        res.render('viewUserReports', context);
+    });
 
+});
+// app.get('viewAllReprorts', function(req,res){
+
+// });
 //Gets the user id if the username and password are correct
 function getUserID(res, req, context, username, password, complete) {
     mysql.pool.query("SELECT id, firstName, lastName FROM users WHERE username = ? AND password = ?", [username, password], function(error, results, fields) {

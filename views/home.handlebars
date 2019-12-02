@@ -8,6 +8,7 @@
   <h2 class="display-2">{{userMessage}}</h2>
   {{#if userid}}
     <button onclick="location.href='/logout'" class="btn btn-primary">Logout</button>
+    <button onclick="location.href='/viewUserReports'" class="btn btn-primary">Previously Reported Incidents</button>
   {{else}}
     <button onclick="location.href='/login';" class="btn btn-primary">Login</button>
   {{/if}}
