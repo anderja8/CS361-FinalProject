@@ -215,8 +215,37 @@ app.get('/viewUserReports/:id',function(req,res){
         res.render('report', context);
     });
 });
-// app.get('viewAllReprorts', function(req,res){
+app.get('/viewAllReports', function(req,res){
+    var context = {};
+    qryString = "SELECT ir.id, ir.userid, ir.incidentDate, ir.title, ir.description, ir.location, ir.incidentType, ir.involvement, ";
+    qryString += "ir.mode1, ir.mode2, ir.mode3, ir.mode4, ir.isAnonymous, ir.receivesUpdates, ";
+    qryString += "concat(u.firstName, \" \", u.lastName) as fullName ";
+    qryString += "from  incidentReports ir left join users u on ir.userid = u.id order by ir.location asc";
 
+    mysql.pool.query(qryString, function(err,reports,fields){
+        if(err){
+            res.end();
+            return;
+        }
+        console.log("tried showing all reports");
+        var params = []
+        for (report in reports){
+			var newRow ={
+                'incidentDate': reports[report].incidentDate,
+                'title': reports[report].title,
+                'description': reports[report].description,
+                'location': reports[report].location,
+                'incidentType': reports[report].incidentType,
+                'id':reports[report].id,
+                'name':reports[report].fullName
+            };
+			params.push(newRow);
+		}
+		context.reports = params;
+		res.render('viewAllReports',context);
+	});
+});
+        
 // });
 //Gets the user id if the username and password are correct
 function getUserID(res, req, context, username, password, complete) {
