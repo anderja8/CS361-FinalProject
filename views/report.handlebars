@@ -1,0 +1,46 @@
+<!-- Write HTML for the single report page here -->
+<div class="bg-info container">
+    <div class="bg-primary row">
+        <div class="text-center col-xs-12">
+            <h1 class="display-1">LA Street Safety Portal - View Report</h1>
+        </div>
+    </div>
+    <h2 class="display-2">Report Details</h2>
+    <button onclick="location.href='/';" class="btn btn-primary">Return Home</button>
+    <button onclick="location.href='/viewUserReports';" class="btn btn-primary">Return to Report List</button>
+    
+    <div class="row">
+        <div class="col-sm-12">
+            {{#if reports}} 
+            <table id="reportLog" class="table table-striped">
+                <tr>
+                    <th scope="col">Topic</th>
+                    <th scope="col">Details</th>
+                </tr>
+                {{#each reports}}
+                <tr>
+                    <td>Title</td>
+                    <td>{{this.title}}</td>
+                </tr>
+                <tr>
+                    <td>Date</td>
+                    <td>{{this.incidentDate}}</td>
+                </tr>
+                <tr>
+                    <td>Location</td>
+                    <td>{{this.location}}</td>
+                </tr>
+                <tr>
+                    <td>Type</td>
+                    <td>{{this.incidentType}}</td>
+                </tr>
+                <tr>
+                    <td>Description</td>
+                    <td>{{this.description}}</td>
+                </tr>
+                {{/each}}
+            </table>
+            {{/if}}
+        </div>
+    </div>
+</div>

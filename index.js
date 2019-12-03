@@ -19,7 +19,7 @@ app.use(express.static('public'));
 
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
-app.set('port', 52222);
+app.set('port', 52223);
 
 app.use(session({
     secret: 'cookieSecret',
@@ -162,9 +162,37 @@ app.get('/logout', function(req, res) {
     context.layout = 'logout';
     res.render('logout', context);
 });
+
 app.get('/viewUserReports',function(req,res){
     var context = {};
-    mysql.pool.query('SELECT * FROM incidentReports where userid =?',[req.session.userid],function(err,reports,fields){
+    mysql.pool.query('SELECT * FROM incidentReports where userid =? ORDER BY incidentDate DESC',[req.session.userid],function(err,reports,fields){
+        if(err){
+            res.end();
+            return;
+        }
+        console.log("tried showing")
+        var params = [];
+        for(report in reports){
+            var newRow ={
+                'incidentDate': reports[report].incidentDate,
+                'title': reports[report].title,
+                'description': reports[report].description,
+                'location': reports[report].location,
+                'incidentType': reports[report].incidentType,
+                'id':reports[report].id
+            };
+            params.push(newRow);
+        }
+        context.reports = params;
+        context.user = req.session.name;
+        console.log(context)
+        res.render('viewUserReports', context);
+    });
+});
+
+app.get('/viewUserReports/:id',function(req,res){
+    var context = {};
+    mysql.pool.query('SELECT * FROM incidentReports where id =? ORDER BY incidentDate DESC',[req.params.id],function(err,reports,fields){
         if(err){
             res.end();
             return;
@@ -184,9 +212,8 @@ app.get('/viewUserReports',function(req,res){
         }
         context.reports = params;
         console.log(context)
-        res.render('viewUserReports', context);
+        res.render('report', context);
     });
-
 });
 // app.get('viewAllReprorts', function(req,res){
 
