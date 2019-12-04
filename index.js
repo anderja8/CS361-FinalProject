@@ -177,10 +177,11 @@ app.get('/viewUserReports',function(req,res){
         var context = {};
         mysql.pool.query('SELECT * FROM incidentReports where userid = ? ORDER BY incidentDate DESC',[req.session.userid],function(err,reports,fields){
             if(err){
+                console.log("error showing user reports")
                 res.end();
                 return;
             }
-            console.log("tried showing")
+            console.log("showing user reports")
             var params = [];
             for(report in reports){
                 var newRow ={
@@ -207,10 +208,11 @@ app.get('/viewUserReports/:id/:prevPage',function(req,res){
     var context = {};
     mysql.pool.query('SELECT * FROM incidentReports where id =? ORDER BY incidentDate DESC',[req.params.id],function(err,reports,fields){
         if(err){
+            console.log("error showing user reports, prevPage")
             res.end();
             return;
         }
-        console.log("tried showing")
+        console.log("tried showing user reports, prevPage")
         var params = [];
         for(report in reports){
             var newRow ={
@@ -229,39 +231,59 @@ app.get('/viewUserReports/:id/:prevPage',function(req,res){
         res.render('report', context);
     });
 });
-app.get('/viewAllReports', function(req,res){
-    var context = {};
-    qryString = "SELECT ir.id, ir.userid, ir.incidentDate, ir.title, ir.description, ir.location, ir.incidentType, ir.involvement, ";
-    qryString += "ir.mode1, ir.mode2, ir.mode3, ir.mode4, ir.isAnonymous, ir.receivesUpdates, ";
-    qryString += "concat(u.firstName, \" \", u.lastName) as fullName ";
-    qryString += "from  incidentReports ir left join users u on ir.userid = u.id order by ir.location asc";
 
-    mysql.pool.query(qryString, function(err,reports,fields){
-        if(err){
-            res.end();
-            return;
-        }
-        console.log("tried showing all reports");
+// now updated to seach by accident type
+app.get('/viewAllReports', function(req,res){
+    if (req.query.searchByTypeAll != null && req.query.searchByTypeAll != "") {
+        var qryString = "SELECT ir.id, ir.userid, ir.incidentDate, ir.title, ir.description, ir.location, ir.incidentType, ir.involvement, ";
+        qryString += "ir.mode1, ir.mode2, ir.mode3, ir.mode4, ir.isAnonymous, ir.receivesUpdates, ";
+        qryString += "concat(u.firstName, \" \", u.lastName) as fullName ";
+        qryString += "from  incidentReports ir left join users u on ir.userid = u.id WHERE ir.incidentType = ? ORDER BY ir.incidentDate DESC";
+
+        mysql.pool.query(qryString, [req.query.searchByTypeAll], function(err,rows,fields){
+            if (err) {
+                next(err);
+                return;
+            }
+            res.send(rows);
+       });
+    }
+
+    else {
+        var context = {};
+        var qryString = "SELECT ir.id, ir.userid, ir.incidentDate, ir.title, ir.description, ir.location, ir.incidentType, ir.involvement, ";
+        qryString += "ir.mode1, ir.mode2, ir.mode3, ir.mode4, ir.isAnonymous, ir.receivesUpdates, ";
+        qryString += "concat(u.firstName, \" \", u.lastName) as fullName ";
+        qryString += "from  incidentReports ir left join users u on ir.userid = u.id ORDER BY ir.incidentDate DESC";
+
+        mysql.pool.query(qryString, function(err,reports,fields){
+            if(err){
+                console.log("error showing all reports");
+                res.end();
+                return;
+            }
+        console.log("showing all reports");
         var params = []
         for (report in reports){
-			var newRow ={
+            var newRow ={
                 'incidentDate': reports[report].incidentDate,
                 'title': reports[report].title,
                 'description': reports[report].description,
                 'location': reports[report].location,
                 'incidentType': reports[report].incidentType,
                 'id':reports[report].id,
-                'name':reports[report].fullName,
-				'currPage':'viewAllReports'
+                'fullName':reports[report].fullName,
+                'currPage':'viewAllReports'
             };
-			params.push(newRow);
-		}
-		context.reports = params;
-		res.render('viewAllReports',context);
-	});
+            params.push(newRow);
+        }
+        context.layout = 'viewAllReports';
+        context.reports = params;
+        res.render('viewAllReports',context);
+       });
+    }
 });
-        
-// });
+
 //Gets the user id if the username and password are correct
 function getUserID(res, req, context, username, password, complete) {
     mysql.pool.query("SELECT id, firstName, lastName FROM users WHERE username = ? AND password = ?", [username, password], function(error, results, fields) {
