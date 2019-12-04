@@ -38,7 +38,7 @@
 
                 </div>
                 <div class="col-sm-2">
-                    <input type="submit" class="btn btn-primary" name="search">
+                    <input type="submit" class="btn btn-primary" id="filter-button" name="search">
                 </div>
             </div>
         </form>
@@ -48,12 +48,15 @@
         <div class="col-sm-12">
             {{#if reports}} 
             <table id="reportLog" class="table table-striped">
+              <thead>
                 <tr>
                     <th scope="col">Options</th>
                     <th scope="col">Incident Date</th>
                     <th scope="col">Title</th>
                     <th scope="col">Incident Type</th>
                 </tr>
+              </thead>
+              <tbody id="table-data">
                 {{#each reports}}
                 <tr id="{{this.id}}">
                     <td>
@@ -70,8 +73,11 @@
                     </td>
                 </tr>
                 {{/each}}
+              </thead>
             </table>
             {{/if}}
         </div>
     </div>
 </div>
+
+<script>bindFilterButton({{this.id}});</script>

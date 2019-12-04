@@ -164,30 +164,42 @@ app.get('/logout', function(req, res) {
 });
 
 app.get('/viewUserReports',function(req,res){
-    var context = {};
-    mysql.pool.query('SELECT * FROM incidentReports where userid =? ORDER BY incidentDate DESC',[req.session.userid],function(err,reports,fields){
-        if(err){
-            res.end();
-            return;
-        }
-        console.log("tried showing")
-        var params = [];
-        for(report in reports){
-            var newRow ={
-                'incidentDate': reports[report].incidentDate,
-                'title': reports[report].title,
-                'description': reports[report].description,
-                'location': reports[report].location,
-                'incidentType': reports[report].incidentType,
-                'id':reports[report].id
-            };
-            params.push(newRow);
-        }
-        context.reports = params;
-        context.user = req.session.name;
-        console.log(context)
-        res.render('viewUserReports', context);
-    });
+    if (req.query.searchByType != null && req.query.searchByType != "") {
+        mysql.pool.query("SELECT * FROM incidentReports WHERE incidentType = ? AND userid = ? ORDER BY incidentDate DESC", [req.query.searchByType, req.session.userid], function (err, rows, fields) {
+            if (err) {
+                next(err);
+                return;
+            }
+            res.send(rows);
+       });
+    }
+    else {
+        var context = {};
+        mysql.pool.query('SELECT * FROM incidentReports where userid = ? ORDER BY incidentDate DESC',[req.session.userid],function(err,reports,fields){
+            if(err){
+                res.end();
+                return;
+            }
+            console.log("tried showing")
+            var params = [];
+            for(report in reports){
+                var newRow ={
+                    'incidentDate': reports[report].incidentDate,
+                    'title': reports[report].title,
+                    'description': reports[report].description,
+                    'location': reports[report].location,
+                    'incidentType': reports[report].incidentType,
+                    'id':reports[report].id
+                };
+                params.push(newRow);
+            }
+            context.layout = 'viewUserReports';
+            context.reports = params;
+            context.user = req.session.name;
+            console.log(context)
+            res.render('viewUserReports', context);
+        });
+    }
 });
 
 app.get('/viewUserReports/:id',function(req,res){
