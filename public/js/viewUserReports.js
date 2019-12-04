@@ -1,4 +1,4 @@
-function bindFilterButton(id) {
+function bindFilterButton() {
     let button = document.getElementById("filter-button");
     button.addEventListener("click", function(event) {
         let filter = $('#searchIncidents').serialize();
@@ -22,7 +22,7 @@ function bindFilterButton(id) {
 
                     data = document.createElement("button");
                     data.setAttribute('class', 'btn btn-primary');
-                    data.setAttribute('onclick', "location.href='/viewUserReports/" + id + "';");
+                    data.setAttribute('onclick', "location.href='/viewUserReports/" + response[p].id + "';");
                     row.appendChild(data);
                     data.textContent = "View";
                     data = document.createElement("td");
