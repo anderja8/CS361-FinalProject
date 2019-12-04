@@ -5,7 +5,7 @@
             <h1 class="display-1">LA Street Safety Portal - View Reports</h1>
         </div>
     </div>
-    <h2 class="display-2">Reports Submitted by {{user}}</h2>
+    <h2 class="display-2">All Submitted Reports</h2>
     <button onclick="location.href='/';" class="btn btn-primary">Return Home</button>
     
     <div class="row">
@@ -58,7 +58,7 @@
                 {{#each reports}}
                 <tr id="{{this.id}}">
                     <td>
-                        <button onclick="location.href='/viewUserReports/{{this.id}}';" class="btn btn-primary">View</button>
+                        <button onclick="location.href='/viewUserReports/{{this.id}}/{{this.currPage}}';" class="btn btn-primary">View</button>
                     </td>
                     <td>
                         {{this.incidentDate}}

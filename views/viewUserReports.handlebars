@@ -60,7 +60,7 @@
                 {{#each reports}}
                 <tr id="{{this.id}}">
                     <td>
-                        <button onclick="location.href='/viewUserReports/{{this.id}}';" class="btn btn-primary">View</button>
+                        <button onclick="location.href='/viewUserReports/{{this.id}}/{{this.currPage}}';" class="btn btn-primary">View</button>
                     </td>
                     <td>
                         {{this.incidentDate}}

@@ -189,7 +189,8 @@ app.get('/viewUserReports',function(req,res){
                     'description': reports[report].description,
                     'location': reports[report].location,
                     'incidentType': reports[report].incidentType,
-                    'id':reports[report].id
+                    'id':reports[report].id,
+					'currPage':'viewUserReports'
                 };
                 params.push(newRow);
             }
@@ -202,7 +203,7 @@ app.get('/viewUserReports',function(req,res){
     }
 });
 
-app.get('/viewUserReports/:id',function(req,res){
+app.get('/viewUserReports/:id/:prevPage',function(req,res){
     var context = {};
     mysql.pool.query('SELECT * FROM incidentReports where id =? ORDER BY incidentDate DESC',[req.params.id],function(err,reports,fields){
         if(err){
@@ -223,6 +224,7 @@ app.get('/viewUserReports/:id',function(req,res){
             params.push(newRow);
         }
         context.reports = params;
+		context.prevPage = req.params.prevPage;
         console.log(context)
         res.render('report', context);
     });
@@ -249,7 +251,8 @@ app.get('/viewAllReports', function(req,res){
                 'location': reports[report].location,
                 'incidentType': reports[report].incidentType,
                 'id':reports[report].id,
-                'name':reports[report].fullName
+                'name':reports[report].fullName,
+				'currPage':'viewAllReports'
             };
 			params.push(newRow);
 		}
