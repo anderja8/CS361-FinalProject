@@ -183,22 +183,22 @@ app.get('/viewUserReports',function(req,res){
         }
         if (req.query.searchByType != null && req.query.searchByType != "all" && req.query.searchByDateBegin != null && req.query.searchByDateBegin != null) {
             console.log("filtering by type");
-            mysql.pool.query("SELECT * FROM incidentReports WHERE incidentType = ? AND userid = ? AND incidentDate BETWEEN ? and ? ORDER BY incidentDate DESC", [req.query.searchByType, req.session.userid, req.query.searchByDateBegin, req.query.searchByDateEnd], function (err, rows, fields) {
+            mysql.pool.query("SELECT * FROM incidentReports WHERE incidentType = ? AND userid = ? AND incidentDate BETWEEN ? and ? ORDER BY incidentDate DESC", [req.query.searchByType, req.session.userid, req.query.searchByDateBegin, req.query.searchByDateEnd], function (err, reports, fields) {
                 if (err) {
                     next(err);
                     return;
                 }
-                res.send(rows);
+                res.send(reports);
            });
         }
         else if (req.query.searchByType != null && req.query.searchByType == "all" && req.query.searchByDateBegin != null && req.query.searchByDateBegin != null) {
             console.log("filtering by date");
-            mysql.pool.query("SELECT * FROM incidentReports WHERE userid = ? AND incidentDate BETWEEN ? and ? ORDER BY incidentDate DESC", [req.session.userid, req.query.searchByDateBegin, req.query.searchByDateEnd], function (err, rows, fields) {
+            mysql.pool.query("SELECT * FROM incidentReports WHERE userid = ? AND incidentDate BETWEEN ? and ? ORDER BY incidentDate DESC", [req.session.userid, req.query.searchByDateBegin, req.query.searchByDateEnd], function (err, reports, fields) {
                 if (err) {
                     next(err);
                     return;
                 }
-                res.send(rows);
+                res.send(reports);
            });
         }
         else {
@@ -269,6 +269,41 @@ app.get('/viewUserReports/:id/:prevPage',function(req,res){
     
 });
 
+app.get('/viewUserReports/:id',function(req,res){
+    var context = {};
+    if(!req.session.userid){
+        context.layout = 'login';
+        res.render('login', context);
+    }
+    else{
+        mysql.pool.query('SELECT * FROM incidentReports where id =? ORDER BY incidentDate DESC',[req.params.id],function(err,reports,fields){
+            if(err){
+                console.log("error showing user reports, prevPage")
+                res.end();
+                return;
+            }
+            console.log("tried showing user reports, prevPage")
+            var params = [];
+            for(report in reports){
+                var newRow ={
+                    'incidentDate': reports[report].incidentDate,
+                    'title': reports[report].title,
+                    'description': reports[report].description,
+                    'location': reports[report].location,
+                    'incidentType': reports[report].incidentType,
+                    'id':reports[report].id
+                };
+                params.push(newRow);
+            }
+            context.reports = params;
+            context.prevPage = 'viewUserReports';
+            console.log(context)
+            res.render('report', context);
+        });
+    }
+    
+});
+
 // now updated to seach by accident type
 app.get('/viewAllReports', function(req,res){
     if(!req.session.userid){
@@ -296,12 +331,12 @@ app.get('/viewAllReports', function(req,res){
             // console.log("filtered by just type: ");
             console.log("type: " + [req.query.searchByTypeAll]);
             console.log("date: "+ [req.query.searchByDateBeginAll] +" - "+ [req.query.searchByDateEndAll]);
-            mysql.pool.query(qryString, [req.query.searchByTypeAll, req.query.searchByDateBeginAll, req.query.searchByDateEndAll], function(err,rows,fields){
+            mysql.pool.query(qryString, [req.query.searchByTypeAll, req.query.searchByDateBeginAll, req.query.searchByDateEndAll], function(err,reports,fields){
                 if (err) {
                     throw(err);
                     return;
                 }
-                res.send(rows);
+                res.send(reports);
            });
         }
 
@@ -312,12 +347,12 @@ app.get('/viewAllReports', function(req,res){
             qryString += "from  incidentReports ir left join users u on ir.userid = u.id WHERE ir.incidentDate BETWEEN ? and ? ORDER BY ir.incidentDate DESC";
             console.log("filtered by just date");
             console.log("date: "+ [req.query.searchByDateBeginAll] +" - "+ [req.query.searchByDateEndAll]);
-            mysql.pool.query(qryString, [req.query.searchByDateBeginAll, req.query.searchByDateEndAll], function(err,rows,fields){
+            mysql.pool.query(qryString, [req.query.searchByDateBeginAll, req.query.searchByDateEndAll], function(err,reports,fields){
                 if (err) {
                     throw(err);
                     return;
                 }
-                res.send(rows);
+                res.send(reports);
            });
         }
         else {
@@ -356,7 +391,6 @@ app.get('/viewAllReports', function(req,res){
            });
         }
     }
-    
 });
 
 //Gets the user id if the username and password are correct
@@ -419,6 +453,7 @@ passport.deserializeUser(function(user_id, done) {
 //});
 
 // source: https://stackoverflow.com/questions/51445306/what-alternative-for-padstart
+// fix issue causing padStart function to fail with the outdated version of node on the flip servers
 if (!String.prototype.padStart) {
     String.prototype.padStart = function padStart(targetLength,padString) {
         targetLength = targetLength>>0; //truncate if number or convert non-number to 0;
