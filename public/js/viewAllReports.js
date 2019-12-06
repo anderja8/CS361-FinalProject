@@ -22,7 +22,7 @@ function bindFilterAllButton() {
 
                     data = document.createElement("button");
                     data.setAttribute('class', 'btn btn-primary');
-                    data.setAttribute('onclick', "location.href='/viewAllReports/" + response[p].id + "';");
+                    data.setAttribute('onclick', "location.href='/viewUserReports/" + response[p].id + "';");
                     row.appendChild(data);
                     data.textContent = "View";
                     data = document.createElement("td");
