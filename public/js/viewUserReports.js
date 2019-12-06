@@ -4,7 +4,6 @@ function bindFilterButton() {
         let filter = $('#searchIncidents').serialize();
         let req = new XMLHttpRequest();
         req.open("GET", "/viewUserReports?" + filter, true);
-
         req.addEventListener('load', function() {
             if (req.status < 400) {
                 let response = JSON.parse(req.responseText);

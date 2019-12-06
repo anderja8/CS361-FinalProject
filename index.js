@@ -170,8 +170,17 @@ app.get('/viewUserReports',function(req,res){
         res.render('login', context);
     }
     else{
-        if (req.query.searchByType != null && req.query.searchByType != "") {
+        if (req.query.searchByType != null && req.query.searchByType != "all" && req.query.searchByDateBegin == "" && req.query.searchByDateEnd == "") {
             mysql.pool.query("SELECT * FROM incidentReports WHERE incidentType = ? AND userid = ? ORDER BY incidentDate DESC", [req.query.searchByType, req.session.userid], function (err, rows, fields) {
+                if (err) {
+                    next(err);
+                    return;
+                }
+                res.send(rows);
+           });
+        }
+        else if (req.query.searchByType == "all") {
+            mysql.pool.query("SELECT * FROM incidentReports WHERE userid = ? ORDER BY incidentDate DESC", [req.session.userid], function (err, rows, fields) {
                 if (err) {
                     next(err);
                     return;
@@ -255,13 +264,27 @@ app.get('/viewAllReports', function(req,res){
         res.render('login', context);
     }
     else{
-        if (req.query.searchByTypeAll != null && req.query.searchByTypeAll != "") {
+        if (req.query.searchByTypeAll != null && req.query.searchByTypeAll != "all" && req.query.searchByDateBeginAll == "" && req.query.searchByDateEndAll == "") {
             var qryString = "SELECT ir.id, ir.userid, ir.incidentDate, ir.title, ir.description, ir.location, ir.incidentType, ir.involvement, ";
             qryString += "ir.mode1, ir.mode2, ir.mode3, ir.mode4, ir.isAnonymous, ir.receivesUpdates, ";
             qryString += "concat(u.firstName, \" \", u.lastName) as fullName ";
             qryString += "from  incidentReports ir left join users u on ir.userid = u.id WHERE ir.incidentType = ? ORDER BY ir.incidentDate DESC";
     
             mysql.pool.query(qryString, [req.query.searchByTypeAll], function(err,rows,fields){
+                if (err) {
+                    next(err);
+                    return;
+                }
+                res.send(rows);
+           });
+        }
+
+        else if (req.query.searchByTypeAll == "all") {
+            var qryString = "SELECT ir.id, ir.userid, ir.incidentDate, ir.title, ir.description, ir.location, ir.incidentType, ir.involvement, ";
+            qryString += "ir.mode1, ir.mode2, ir.mode3, ir.mode4, ir.isAnonymous, ir.receivesUpdates, ";
+            qryString += "concat(u.firstName, \" \", u.lastName) as fullName ";
+            qryString += "from  incidentReports ir left join users u on ir.userid = u.id ORDER BY ir.incidentDate DESC";
+            mysql.pool.query(qryString, function(err,rows,fields){
                 if (err) {
                     next(err);
                     return;
