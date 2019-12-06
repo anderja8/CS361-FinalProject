@@ -164,24 +164,68 @@ app.get('/logout', function(req, res) {
 });
 
 app.get('/viewUserReports',function(req,res){
-    if (req.query.searchByType != null && req.query.searchByType != "") {
-        mysql.pool.query("SELECT * FROM incidentReports WHERE incidentType = ? AND userid = ? ORDER BY incidentDate DESC", [req.query.searchByType, req.session.userid], function (err, rows, fields) {
-            if (err) {
-                next(err);
-                return;
-            }
-            res.send(rows);
-       });
-    }
-    else {
+    if(!req.session.userid){
         var context = {};
-        mysql.pool.query('SELECT * FROM incidentReports where userid = ? ORDER BY incidentDate DESC',[req.session.userid],function(err,reports,fields){
+        context.layout = 'login';
+        res.render('login', context);
+    }
+    else{
+        if (req.query.searchByType != null && req.query.searchByType != "") {
+            mysql.pool.query("SELECT * FROM incidentReports WHERE incidentType = ? AND userid = ? ORDER BY incidentDate DESC", [req.query.searchByType, req.session.userid], function (err, rows, fields) {
+                if (err) {
+                    next(err);
+                    return;
+                }
+                res.send(rows);
+           });
+        }
+        else {
+            var context = {};
+            mysql.pool.query('SELECT * FROM incidentReports where userid = ? ORDER BY incidentDate DESC',[req.session.userid],function(err,reports,fields){
+                if(err){
+                    console.log("error showing user reports")
+                    res.end();
+                    return;
+                }
+                console.log("showing user reports")
+                var params = [];
+                for(report in reports){
+                    var newRow ={
+                        'incidentDate': reports[report].incidentDate,
+                        'title': reports[report].title,
+                        'description': reports[report].description,
+                        'location': reports[report].location,
+                        'incidentType': reports[report].incidentType,
+                        'id':reports[report].id,
+                        'currPage':'viewUserReports'
+                    };
+                    params.push(newRow);
+                }
+                context.layout = 'viewUserReports';
+                context.reports = params;
+                context.user = req.session.name;
+                console.log(context)
+                res.render('viewUserReports', context);
+            });
+        }
+    }
+    
+});
+
+app.get('/viewUserReports/:id/:prevPage',function(req,res){
+    var context = {};
+    if(!req.session.userid){
+        context.layout = 'login';
+        res.render('login', context);
+    }
+    else{
+        mysql.pool.query('SELECT * FROM incidentReports where id =? ORDER BY incidentDate DESC',[req.params.id],function(err,reports,fields){
             if(err){
-                console.log("error showing user reports")
+                console.log("error showing user reports, prevPage")
                 res.end();
                 return;
             }
-            console.log("showing user reports")
+            console.log("tried showing user reports, prevPage")
             var params = [];
             for(report in reports){
                 var newRow ={
@@ -190,98 +234,77 @@ app.get('/viewUserReports',function(req,res){
                     'description': reports[report].description,
                     'location': reports[report].location,
                     'incidentType': reports[report].incidentType,
-                    'id':reports[report].id,
-					'currPage':'viewUserReports'
+                    'id':reports[report].id
                 };
                 params.push(newRow);
             }
-            context.layout = 'viewUserReports';
             context.reports = params;
-            context.user = req.session.name;
+            context.prevPage = req.params.prevPage;
             console.log(context)
-            res.render('viewUserReports', context);
+            res.render('report', context);
         });
     }
-});
-
-app.get('/viewUserReports/:id/:prevPage',function(req,res){
-    var context = {};
-    mysql.pool.query('SELECT * FROM incidentReports where id =? ORDER BY incidentDate DESC',[req.params.id],function(err,reports,fields){
-        if(err){
-            console.log("error showing user reports, prevPage")
-            res.end();
-            return;
-        }
-        console.log("tried showing user reports, prevPage")
-        var params = [];
-        for(report in reports){
-            var newRow ={
-                'incidentDate': reports[report].incidentDate,
-                'title': reports[report].title,
-                'description': reports[report].description,
-                'location': reports[report].location,
-                'incidentType': reports[report].incidentType,
-                'id':reports[report].id
-            };
-            params.push(newRow);
-        }
-        context.reports = params;
-		context.prevPage = req.params.prevPage;
-        console.log(context)
-        res.render('report', context);
-    });
+    
 });
 
 // now updated to seach by accident type
 app.get('/viewAllReports', function(req,res){
-    if (req.query.searchByTypeAll != null && req.query.searchByTypeAll != "") {
-        var qryString = "SELECT ir.id, ir.userid, ir.incidentDate, ir.title, ir.description, ir.location, ir.incidentType, ir.involvement, ";
-        qryString += "ir.mode1, ir.mode2, ir.mode3, ir.mode4, ir.isAnonymous, ir.receivesUpdates, ";
-        qryString += "concat(u.firstName, \" \", u.lastName) as fullName ";
-        qryString += "from  incidentReports ir left join users u on ir.userid = u.id WHERE ir.incidentType = ? ORDER BY ir.incidentDate DESC";
-
-        mysql.pool.query(qryString, [req.query.searchByTypeAll], function(err,rows,fields){
-            if (err) {
-                next(err);
-                return;
-            }
-            res.send(rows);
-       });
-    }
-
-    else {
+    if(!req.session.userid){
         var context = {};
-        var qryString = "SELECT ir.id, ir.userid, ir.incidentDate, ir.title, ir.description, ir.location, ir.incidentType, ir.involvement, ";
-        qryString += "ir.mode1, ir.mode2, ir.mode3, ir.mode4, ir.isAnonymous, ir.receivesUpdates, ";
-        qryString += "concat(u.firstName, \" \", u.lastName) as fullName ";
-        qryString += "from  incidentReports ir left join users u on ir.userid = u.id ORDER BY ir.incidentDate DESC";
-
-        mysql.pool.query(qryString, function(err,reports,fields){
-            if(err){
-                console.log("error showing all reports");
-                res.end();
-                return;
-            }
-        console.log("showing all reports");
-        var params = []
-        for (report in reports){
-            var newRow ={
-                'incidentDate': reports[report].incidentDate,
-                'title': reports[report].title,
-                'description': reports[report].description,
-                'location': reports[report].location,
-                'incidentType': reports[report].incidentType,
-                'id':reports[report].id,
-                'fullName':reports[report].fullName,
-                'currPage':'viewAllReports'
-            };
-            params.push(newRow);
-        }
-        context.layout = 'viewAllReports';
-        context.reports = params;
-        res.render('viewAllReports',context);
-       });
+        context.layout = 'login';
+        res.render('login', context);
     }
+    else{
+        if (req.query.searchByTypeAll != null && req.query.searchByTypeAll != "") {
+            var qryString = "SELECT ir.id, ir.userid, ir.incidentDate, ir.title, ir.description, ir.location, ir.incidentType, ir.involvement, ";
+            qryString += "ir.mode1, ir.mode2, ir.mode3, ir.mode4, ir.isAnonymous, ir.receivesUpdates, ";
+            qryString += "concat(u.firstName, \" \", u.lastName) as fullName ";
+            qryString += "from  incidentReports ir left join users u on ir.userid = u.id WHERE ir.incidentType = ? ORDER BY ir.incidentDate DESC";
+    
+            mysql.pool.query(qryString, [req.query.searchByTypeAll], function(err,rows,fields){
+                if (err) {
+                    next(err);
+                    return;
+                }
+                res.send(rows);
+           });
+        }
+    
+        else {
+            var context = {};
+            var qryString = "SELECT ir.id, ir.userid, ir.incidentDate, ir.title, ir.description, ir.location, ir.incidentType, ir.involvement, ";
+            qryString += "ir.mode1, ir.mode2, ir.mode3, ir.mode4, ir.isAnonymous, ir.receivesUpdates, ";
+            qryString += "concat(u.firstName, \" \", u.lastName) as fullName ";
+            qryString += "from  incidentReports ir left join users u on ir.userid = u.id ORDER BY ir.incidentDate DESC";
+    
+            mysql.pool.query(qryString, function(err,reports,fields){
+                if(err){
+                    console.log("error showing all reports");
+                    res.end();
+                    return;
+                }
+            console.log("showing all reports");
+            var params = []
+            for (report in reports){
+                var newRow ={
+                    'incidentDate': reports[report].incidentDate,
+                    'title': reports[report].title,
+                    'description': reports[report].description,
+                    'location': reports[report].location,
+                    'incidentType': reports[report].incidentType,
+                    'id':reports[report].id,
+                    'fullName':reports[report].fullName,
+                    'currPage':'viewAllReports'
+                };
+                params.push(newRow);
+            }
+            context.layout = 'viewAllReports';
+            context.reports = params;
+            res.render('viewAllReports',context);
+           });
+        }
+    }
+    
 });
 
 //Gets the user id if the username and password are correct
